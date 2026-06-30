@@ -1,17 +1,21 @@
-import { Link } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import Button from "@/components/Button";
+import ImageViewer from "@/components/ImageViewer";
+import { StyleSheet, View } from "react-native";
+
+const PlaceHolderImage = require("/home/sean/app-projects/test-app/assets/images/japanese_bg.png")
+
 
 export default function Index() {
   return (
-    <View
-      style={bust_app.container}
-    >
-      <Text style={bust_app.text}>The best app ever!!!</Text>
-      <Link 
-        href={"/about"}
-        style={bust_app.button}>
-          Go To About Screen
-      </Link>
+    <View style={bust_app.container}>
+      <View style={bust_app.imageContainer}>
+        <ImageViewer imgSauce={PlaceHolderImage}/>
+      </View>
+
+      <View style={bust_app.footerContainer}>
+        <Button label="Choose a photo" theme="primary" />
+        <Button label="Use this photo" />
+      </View>
 
     </View>
   );
@@ -25,15 +29,11 @@ const bust_app = StyleSheet.create({
     alignItems: "center",
 
   },
-  text: {
-    color: "white",
+  imageContainer: {
+    flex: 1
   },
-  button: {
-    color: "white",
-    textDecorationLine: "underline",
-    fontSize: 20,
+  footerContainer: {
+    flex: 1 / 4,
+    alignItems: "center",
   }
-
-
-
 })
