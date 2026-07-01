@@ -6,13 +6,17 @@ import EmojiSticker from "@/components/EmojiSticker";
 import IconButton from "@/components/IconButton";
 import ImageViewer from "@/components/ImageViewer";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import * as MediaLibrary from "expo-media-library";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { captureRef } from "react-native-view-shot";
 
 const PlaceHolderImage = require("/home/sean/app-projects/test-app/assets/images/japanese_bg.png")
 
 
 export default function Index() {
+  const imageRef = useRef(null);
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
 
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
     undefined
@@ -23,6 +27,11 @@ export default function Index() {
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   
+  useEffect(() => {
+    if (permissionResponse?.granted) {
+      requestPermission();
+    }
+  }, []);
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -46,7 +55,19 @@ export default function Index() {
   };
 
   const onSaveImageAsync = async () => {
-
+    try {
+      const localUri = await captureRef(imageRef, {
+        height: 440,
+        quality: 1,
+      });
+      
+      await MediaLibrary.saveToLibraryAsync(localUri);
+      if (localUri) {
+        alert("Saved!");
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onModalClose = () => {
@@ -55,7 +76,7 @@ export default function Index() {
 
   return (
     <View style={bust_app.container}>
-      <View style={bust_app.imageContainer}>
+      <View ref={imageRef} collapsable={false} style={{}}>
         <ImageViewer imgSauce={selectedImage || PlaceHolderImage}/>
         { pickedEmoji && (
           <EmojiSticker imgSize={100} stickerSource={pickedEmoji} />
@@ -95,7 +116,6 @@ const bust_app = StyleSheet.create({
     backgroundColor: "#282828",
     justifyContent: "center",
     alignItems: "center",
-
   },
   imageContainer: {
     flex: 1
