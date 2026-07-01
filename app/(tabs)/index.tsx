@@ -5,11 +5,13 @@ import EmojiPicker from "@/components/EmojiPicker";
 import EmojiSticker from "@/components/EmojiSticker";
 import IconButton from "@/components/IconButton";
 import ImageViewer from "@/components/ImageViewer";
+import domtoimage from "dom-to-image";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
+
 
 const PlaceHolderImage = require("/home/sean/app-projects/test-app/assets/images/japanese_bg.png")
 
@@ -55,6 +57,19 @@ export default function Index() {
   };
 
   const onSaveImageAsync = async () => {
+    if (Platform.OS === "web") {
+      // @ts-ignore
+      domtoimage.toJpeg(imageRef.current, { quality: 0.95, width: 320, height: 440 })
+        .then((dataUrl) => {
+          let link = document.createElement("a");
+          link.download = "busted.jpeg";
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((e) => {
+          console.log("WEB ERROR:", e);
+        });
+    }
     try {
       const localUri = await captureRef(imageRef, {
         height: 440,
