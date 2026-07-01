@@ -23,7 +23,7 @@ export default function TabsLayout() {
     <Tabs.Screen 
       name="index" 
       options={{
-        headerTitle: "The Bustdown",
+        headerTitle: "Sticker App",
         title: "Index",
         tabBarIcon: ({focused, color}) => 
             (<Ionicons 

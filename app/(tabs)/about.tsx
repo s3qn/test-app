@@ -5,7 +5,7 @@ export default function AboutScreen() {
     <View
       style={bust_app.container}
     >
-      <Text style={bust_app.text}>Who is rarri la flexiana you may ask!</Text>
+      <Text style={bust_app.text}>This is a test application! if you see this then guess what! everything is working!</Text>
     </View>
   );
 }
